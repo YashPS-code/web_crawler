@@ -1,5 +1,23 @@
 const {JSDOM} = require("jsdom")
 
+async function webcrawl(baseURL){
+    try{
+        const webpage = await fetch(baseURL)
+        if(webpage.status>399){
+            console.log("Error: status code improper ")
+            return
+        }
+
+        if(!webpage.headers.get('content-type').includes("text/html")){
+            console.log("Error: HTML not provided")
+            return
+        }
+        console.log(await webpage.text())
+    } catch(err){
+        console.log(`error:${err}`)
+    }
+}
+
 function getUrlFromHtml(htmlBody,baseUrl){
     const urls=[]
     const dom = new JSDOM(htmlBody)
@@ -35,5 +53,6 @@ function urlnormalizer(testurl){
 
 module.exports ={
     urlnormalizer,
-    getUrlFromHtml
+    getUrlFromHtml,
+    webcrawl
 }
